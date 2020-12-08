@@ -1,20 +1,31 @@
-# AboutMe
-Lab 06: Node, npm, and Express
+# Project Name
+Lab 06 - Node, npm, and Express
 
-## Authors/Contributors
-Nick Abramowicz
+**Author**: Nick Abramowicz
+**Version**: 1.0.2 (increment the patch/fix version number if you make more commits past your first submission)
 
-## Description
-I want to be able to filter the images so that I can view only images that match a keyword.
+## Overview
+<!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
 
-## Code behind the page
-JavaScript
-JSON
+## Getting Started
+<!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
 
-## Time Estimate
-### Lab Day 1
-#### Feature 1
-- Number and name of feature: Feature 1
-- Estimate of time needed to complete: 1 Hour
-- Start time: 2:41
-- Finish time: 4:28
+## Architecture
+<!-- Provide a detailed description of the application design. What technologies (languages, libraries, etc) you're using, and any other relevant design information. -->
+
+## Change Log
+<!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an examples:
+
+01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource.
+
+12-07-2020 2:00pm - Created Repository 
+12-07-2020 3:00pm - Created need configurations and files needed for fully functionable deployed page on Heroku.
+12-07-2020 4:25pm - Created a route with a method of get.
+12-07-2020 4:45pm - Created a constructor function.
+12-07-2020 5:15pm - Returned an object which contained neccessary information for correct client rendering.
+12-07-2020 5:20pm - Depoyed updated express server to Heroku.
+
+
+## Credits and Collaborations
+<!-- Give credit (and a link) to other people or resources that helped you build this application. -->
+-->
