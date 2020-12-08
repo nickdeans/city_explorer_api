@@ -2,7 +2,7 @@
 Lab 06 - Node, npm, and Express
 
 **Author**: Nick Abramowicz
-**Version**: 1.0.2 (increment the patch/fix version number if you make more commits past your first submission)
+**Version**: 1.1.0 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
 <!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
@@ -24,6 +24,10 @@ Lab 06 - Node, npm, and Express
 12-07-2020 4:45pm - Created a constructor function.
 12-07-2020 5:15pm - Returned an object which contained neccessary information for correct client rendering.
 12-07-2020 5:20pm - Depoyed updated express server to Heroku.
+12-08-2020 2:00pm - Created route with a method of get d path of /weather
+12-08-2020 2:30pm - Created constructor function for weather route.
+12-08-2020 3:00pm - Returned an array of objects.
+12-08-2020 3:10pm - deployed updated to Heroku.
 
 
 ## Credits and Collaborations

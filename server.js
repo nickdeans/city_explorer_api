@@ -24,12 +24,26 @@ app.get('/location', function(req,res){
     res.send(instanceOfCoordinates);
 });
 
+app.get('/weather', function(req,res){
+    const weatherStatsArray = [];
+    const weatherStats = require('./data/weather.json');
+    weatherStats.data.forEach(instance=> {
+        weatherStatsArray.push(new Weather(instance));
+    });
+    res.send(weatherStatsArray);
+});
+
 // ========== Callback Functions =============
 
 function Coordinates(coordinateObject){
     this.name = coordinateObject[0].display_name;
     this.latitude = coordinateObject[0].lat;
     this.longitude = coordinateObject[0].lon;
+}
+
+function Weather(weatherObject){
+    this.forecast = weatherObject.weather.description;
+    this.time = weatherObject.valid_date;
 }
 
 // ========== Add Error handling and start server ========
