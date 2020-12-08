@@ -4,7 +4,6 @@
 
 const express = require('express');
 const cors = require('cors');
-const { static } = require('express');
 require('dotenv').config();
 
 const app = express();
@@ -17,10 +16,25 @@ app.use(cors());
 // ======== Routes ==========
 
 app.get('/location', function(req,res){
-    res.send('./index.html');
-})
+    const coordinates = require('./data/location.json');
+    const instanceOfCoordinates = new Coordinates(coordinates);
 
-// ========== Callback FUnctions =============
+    console.log(instanceOfCoordinates);
 
-app.use(express.static('./public'));
-app.listen(PORT, () => console.log('server is working on'));
+    res.send(instanceOfCoordinates);
+});
+
+// ========== Callback Functions =============
+
+function Coordinates(coordinateObject){
+    this.name = coordinateObject[0].display_name;
+    this.latitude = coordinateObject[0].lat;
+    this.longitude = coordinateObject[0].lon;
+}
+
+// ========== Add Error handling and start server ========
+
+app.use('*', (request, response) => {
+    response.status(404).send('The route you are looking for is disconnected. Come back soon!');
+});
+app.listen(PORT, () => console.log('server is up on port: ${PORT}'));
