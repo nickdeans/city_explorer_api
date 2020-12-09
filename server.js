@@ -48,6 +48,21 @@ app.get('/weather', function(req,res){
         }).catch(error => console.log(error));
 });
 
+app.get('/trails', function(req,res){
+    const TRAIL_API_KEY = process.env.TRAIL_API_KEY;
+    superagent.get('https://www.hikingproject.com/data/get-trails?lat=40.0274&lon=-105.2519&maxDistance=10&key=200991550-2da6ccb4e4aab4a21cc5f8e882f9fdf4')
+    .query({
+        key: TRAIL_API_KEY,
+        lat: req.query.latitude,
+        lon: req.query.longitude,
+    })
+    .then(whatReturnsBack => {
+        const trailInfo = whatReturnsBack.body;
+        const trailInfoArray = trailInfo.trails.map(instance => new Trail(instance));
+        res.send(trailInfoArray);
+    }).catch(error => console.error(error));
+});
+
 // ========== Callback Functions =============
 
 function Coordinates(coordinateObject, search_query){
@@ -60,6 +75,19 @@ function Coordinates(coordinateObject, search_query){
 function Weather(weatherObject){
     this.forecast = weatherObject.weather.description;
     this.time = weatherObject.valid_date;
+}
+
+function Trail(trail){
+    this.name = trail.name;
+    this.location = trail.location;
+    this.length = trail.length;
+    this.stars = trail.stars;
+    this.summary = trail.summary;
+    this.trail_url = trail.url;
+    this.conditions = trail.conditionDetails
+    this.condition_date = trail.conditionDate.substring(4,7);
+    this.condition_time = trail.conditionDate.substring(4,7);
+    this.star_votes = trail.minStars;
 }
 
 // ========== Add Error handling and start server ========
