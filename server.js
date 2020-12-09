@@ -4,7 +4,9 @@
 
 const express = require('express');
 const cors = require('cors');
+const superagent = require('superagent');
 require('dotenv').config();
+
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -16,12 +18,18 @@ app.use(cors());
 // ======== Routes ==========
 
 app.get('/location', function(req,res){
-    const coordinates = require('./data/location.json');
-    const instanceOfCoordinates = new Coordinates(coordinates);
+    const GEOCODE_API_KEY = process.env.GEOCODE_API_KEY;
+    const url = `https://us1.locationiq.com/v1/search.php?key=${GEOCODE_API_KEY}&q=${req.query.city}&format=json`;
 
-    console.log(instanceOfCoordinates);
-
-    res.send(instanceOfCoordinates);
+    superagent.get(url).then(whatReturnsBack => {
+        const coordinates = whatReturnsBack.body;
+        const instanceOfCoordinates = new Coordinates(coordinates);
+    
+        console.log(instanceOfCoordinates);
+    
+        res.send(instanceOfCoordinates);
+    })
+        .catch(error => console.log(error));
 });
 
 app.get('/weather', function(req,res){
