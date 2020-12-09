@@ -30,6 +30,7 @@ Lab 06 - Node, npm, and Express
 12-08-2020 3:10pm - deployed updated to Heroku.
 12-08-2020 9:00pm - Created geocode API.
 12-08-2020 10:00pm - Created weather API.
+12-09-2020 2:40pm - Created Trails API.
 
 
 ## Credits and Collaborations
