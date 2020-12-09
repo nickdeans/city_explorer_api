@@ -28,6 +28,8 @@ Lab 06 - Node, npm, and Express
 12-08-2020 2:30pm - Created constructor function for weather route.
 12-08-2020 3:00pm - Returned an array of objects.
 12-08-2020 3:10pm - deployed updated to Heroku.
+12-08-2020 9:00pm - Created geocode API.
+12-08-2020 10:00pm - Created weather API.
 
 
 ## Credits and Collaborations
