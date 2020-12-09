@@ -23,7 +23,7 @@ app.get('/location', function(req,res){
 
     superagent.get(url).then(whatReturnsBack => {
         const coordinates = whatReturnsBack.body;
-        const instanceOfCoordinates = new Coordinates(coordinates);
+        const instanceOfCoordinates = new Coordinates(coordinates,req.query.city);
     
         console.log(instanceOfCoordinates);
     
@@ -33,18 +33,26 @@ app.get('/location', function(req,res){
 });
 
 app.get('/weather', function(req,res){
-    const weatherStatsArray = [];
-    const weatherStats = require('./data/weather.json');
-    weatherStats.data.forEach(instance=> {
-        weatherStatsArray.push(new Weather(instance));
-    });
-    res.send(weatherStatsArray);
+    const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
+    superagent.get('https://api.weatherbit.io/v2.0/forecast/daily')
+        .query({
+            key: WEATHER_API_KEY,
+            lat: req.query.latitude,
+            lon: req.query.longitude,
+            days: 8
+        })
+        .then(whatReturnsBack => {
+            const weatherStats = whatReturnsBack.body;
+            const weatherStatsArray = weatherStats.data.map(instance => new Weather(instance));
+            res.send(weatherStatsArray);
+        }).catch(error => console.log(error));
 });
 
 // ========== Callback Functions =============
 
-function Coordinates(coordinateObject){
-    this.name = coordinateObject[0].display_name;
+function Coordinates(coordinateObject, search_query){
+    this.search_query = coordinateObject[0].search_query || 'seattle';
+    this.formatted_query = coordinateObject[0].display_name;
     this.latitude = coordinateObject[0].lat;
     this.longitude = coordinateObject[0].lon;
 }
