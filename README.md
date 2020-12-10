@@ -32,6 +32,9 @@ Lab 06 - Node, npm, and Express
 12-08-2020 10:00pm - Created weather API.
 12-09-2020 2:40pm - Created Trails API.
 12-09-2020 3:30pm - Installed pg and created Database with env to my server.
+12-09:2020 4:25pm - Created function to check database for location info. 
+12-09-2020 4:30pm - If location exists, send info to client. If not request data from API.
+12-09-2020 5:20pm - successfully deployed backend url from heroku on to city explorer page.
 
 
 ## Credits and Collaborations
