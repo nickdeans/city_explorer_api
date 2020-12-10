@@ -5,11 +5,16 @@
 const express = require('express');
 const cors = require('cors');
 const superagent = require('superagent');
+const pg = require('pg');
 require('dotenv').config();
 
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const DATABASE_URL = process.env.DATABASE_URL;
+
+const client = new pg.Client(DATABASE_URL);
+client.on('error', (error) => console.error(error));
 
 // ======== Middleware =========
 
@@ -18,18 +23,31 @@ app.use(cors());
 // ======== Routes ==========
 
 app.get('/location', function(req,res){
-    const GEOCODE_API_KEY = process.env.GEOCODE_API_KEY;
-    const url = `https://us1.locationiq.com/v1/search.php?key=${GEOCODE_API_KEY}&q=${req.query.city}&format=json`;
-
-    superagent.get(url).then(whatReturnsBack => {
-        const coordinates = whatReturnsBack.body;
-        const instanceOfCoordinates = new Coordinates(coordinates,req.query.city);
-    
-        console.log(instanceOfCoordinates);
-    
-        res.send(instanceOfCoordinates);
+    client.query('SELECT * FROM location WHERE search_query=$1', [req.query.city])
+    .then(data => {
+        if(data.rows.length > 0){
+            console.log(data.rows);
+            console.log('need to send them stuff');
+            res.send(data.rows[0]);
+        } else {
+            const GEOCODE_API_KEY = process.env.GEOCODE_API_KEY;
+            const url = `https://us1.locationiq.com/v1/search.php?key=${GEOCODE_API_KEY}&q=${req.query.city}&format=json`;
+        
+            superagent.get(url).then(whatReturnsBack => {
+                const coordinates = whatReturnsBack.body;
+                const instanceOfCoordinates = new Coordinates(coordinates,req.query.city);
+            
+                client.query(
+                    `INSERT INTO location
+                    (search_query, latitude, longitude)
+                    VALUES ($1, $2, $3)`, [req.query.city, instanceOfCoordinates.latitude, instanceOfCoordinates.longitude])
+                    .then(() => {
+                        res.send(instanceOfCoordinates);
+                    });
     })
         .catch(error => console.log(error));
+    }
+});        
 });
 
 app.get('/weather', function(req,res){
@@ -95,4 +113,9 @@ function Trail(trail){
 app.use('*', (request, response) => {
     response.status(404).send('The route you are looking for is disconnected. Come back soon!');
 });
-app.listen(PORT, () => console.log('server is up on port: ${PORT}'));
+
+client.connect()
+    .then(() => {
+        app.listen(PORT, () => console.log(`server is up on port: ${PORT}`));
+    })
+    .catch(error => console.error(error));
