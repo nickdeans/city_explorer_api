@@ -39,8 +39,8 @@ app.get('/location', function(req,res){
             
                 client.query(
                     `INSERT INTO location
-                    (search_query, latitude, longitude)
-                    VALUES ($1, $2, $3)`, [req.query.city, instanceOfCoordinates.latitude, instanceOfCoordinates.longitude])
+                    (search_query, latitude, longitude, formatted_query)
+                    VALUES ($1, $2, $3, $4)`, [req.query.city, instanceOfCoordinates.latitude, instanceOfCoordinates.longitude, instanceOfCoordinates.formatted_query])
                     .then(() => {
                         res.send(instanceOfCoordinates);
                     });
@@ -81,6 +81,20 @@ app.get('/trails', function(req,res){
     }).catch(error => console.error(error));
 });
 
+app.get('/movies', function(req,res){
+    const MOVIE_API_KEY = process.env.MOVIE_API_KEY;
+    superagent.get('https://api.themoviedb.org/3/movie/550?api_key=c1b44571a95466974c595046d3a7d5cb')
+    .query({
+        api_key: MOVIE_API_KEY,
+        query: req.query.search_query
+    })
+    .then(whatReturnsBack => {
+        const movieInfo = whatReturnsBack.body.results;
+        const movieInfoArray = movieInfo.body.results.map(instance => new Movie(instance));
+        res.send(movieInfoArray);
+    }).catch(error => console.error(error));
+});
+
 // ========== Callback Functions =============
 
 function Coordinates(coordinateObject, search_query){
@@ -108,10 +122,19 @@ function Trail(trail){
     this.star_votes = trail.minStars;
 }
 
+function Movie(movie){
+    this.title = movie.original_title;
+    this.overview = movie.overview;
+    this.average_votes = movie.vote_average;
+    this.image_url = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+    this.popularity = movie.popularity;
+    this.released_on = movie.release_date;
+}
+
 // ========== Add Error handling and start server ========
 
 app.use('*', (request, response) => {
-    response.status(404).send('The route you are looking for is disconnected. Come back soon!');
+    response.send('The route you are looking for is disconnected. Come back soon!');
 });
 
 client.connect()
